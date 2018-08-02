@@ -1,5 +1,7 @@
 require 'thor'
 
+require 'lcdeploy/lcdfile'
+
 module LCD
   class CLI < Thor
     include LCD
@@ -20,6 +22,7 @@ module LCD
     desc 'deploy LCDFILE', 'Deploy from an lcdfile'
     def deploy(filename = 'Lcdfile')
       puts "Deploying from #{filename}"
+      Lcdfile.new(filename).run!
     end
 
     private
