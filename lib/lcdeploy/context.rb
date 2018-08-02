@@ -11,5 +11,9 @@ module LCD
     def run!
       puts "Would run #{@steps.map(&:to_h).inspect}"
     end
+
+    def to_h
+      { steps: @steps.map(&:to_h) }
+    end
   end
 end

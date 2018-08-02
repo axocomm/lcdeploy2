@@ -14,7 +14,6 @@ module LCD
 
     def self.eval!(filename, ctx)
       new(ctx).instance_eval(File.read(filename))
-      ctx.run!
     end
   end
 end

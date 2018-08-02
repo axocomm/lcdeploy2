@@ -17,7 +17,7 @@ module LCD
 
     desc 'preview LCDFILE', 'Preview deploy steps'
     def preview(filename = 'Lcdfile')
-      Log.info "Previewing #{filename}"
+      Lcdfile.new(filename).preview
     end
 
     desc 'deploy LCDFILE', 'Deploy from an lcdfile'

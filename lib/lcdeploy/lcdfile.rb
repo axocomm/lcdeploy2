@@ -8,7 +8,19 @@ module LCD
       @ctx = Context.new
     end
 
+    def preview
+      eval!
+      puts @ctx.to_h
+    end
+
     def run!
+      eval!
+      @ctx.run!
+    end
+
+    private
+
+    def eval!
       DSL.eval!(@filename, @ctx)
     end
   end
