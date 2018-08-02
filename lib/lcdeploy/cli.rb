@@ -1,6 +1,7 @@
 require 'thor'
 
 require 'lcdeploy/lcdfile'
+require 'lcdeploy/logging'
 
 module LCD
   class CLI < Thor
@@ -16,12 +17,12 @@ module LCD
 
     desc 'preview LCDFILE', 'Preview deploy steps'
     def preview(filename = 'Lcdfile')
-      puts "Yo it's #{filename}"
+      Log.info "Previewing #{filename}"
     end
 
     desc 'deploy LCDFILE', 'Deploy from an lcdfile'
     def deploy(filename = 'Lcdfile')
-      puts "Deploying from #{filename}"
+      Log.info "Deploying from #{filename}"
       Lcdfile.new(filename).run!
     end
 
@@ -29,9 +30,9 @@ module LCD
 
     def configure_logging!
       if options[:verbose]
-        puts 'verbose'
+        Log.configure! verbose: true
       elsif options[:quiet]
-        puts 'quiet'
+        Log.configure! quiet: true
       end
     end
   end
