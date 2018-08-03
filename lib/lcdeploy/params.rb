@@ -27,7 +27,7 @@ module LCD
     end
 
     class FieldSpec
-      TYPES = %i[int float string] # For now
+      TYPES = %i[int float string symbol] # For now
 
       attr_reader :type
 
@@ -66,6 +66,8 @@ module LCD
           val.is_a?(Float)
         when :string
           val.is_a?(String)
+        when :symbol
+          val.is_a?(Symbol)
         else
           # This should never happen
           false
