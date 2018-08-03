@@ -7,7 +7,13 @@ module LCD
       @ctx = ctx
     end
 
-    # Actions
+    # Context actions
+
+    def configure(params)
+      @ctx.configure!(params)
+    end
+
+    # Step registration
 
     def clone_repository(source, params = {})
       Steps::CloneRepository.new(source, params).register!(@ctx)
