@@ -5,11 +5,11 @@ module LCD
     LEVELS = {
       debug: ['***', :green],
       info: ['===', :white],
-      warn: ['-->', :yellow],
+      warning: ['-->', :yellow],
       error: ['!!!', :red]
     }
 
-    @@enabled = %i[info warn error]
+    @@enabled = %i[info warning error]
 
     LEVELS.keys.each do |level|
       define_singleton_method(level) { |msg| log msg, level }
@@ -17,9 +17,9 @@ module LCD
 
     def self.configure!(params = {})
       if params[:verbose]
-        @@enabled = %i[debug info warn error]
+        @@enabled = %i[debug info warning error]
       elsif params[:quiet]
-        @@enabled = %i[warn error]
+        @@enabled = %i[warning error]
       end
     end
 
