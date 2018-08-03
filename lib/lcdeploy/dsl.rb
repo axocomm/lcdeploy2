@@ -1,3 +1,4 @@
+require 'lcdeploy/logging'
 require 'lcdeploy/steps/clone_repository'
 require 'lcdeploy/steps/run_command'
 
@@ -11,6 +12,14 @@ module LCD
 
     def configure(params)
       @ctx.configure!(params)
+    end
+
+    def config
+      @ctx.config
+    end
+
+    def log(message, level = :info)
+      Log.log("[lcdfile] #{message}", level)
     end
 
     # Step registration

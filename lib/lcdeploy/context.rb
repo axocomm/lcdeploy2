@@ -3,6 +3,8 @@ require 'yaml'
 
 module LCD
   class Context
+    attr_reader :config
+
     def initialize
       @steps = []
       @config = {}
