@@ -1,3 +1,4 @@
+require 'lcdeploy/logging'
 require 'lcdeploy/step'
 
 module LCD
@@ -13,7 +14,7 @@ module LCD
       end
 
       def run!
-        puts "Would clone_repository #{@repository}"
+        Log.debug "Would clone repository #{@repository}"
       end
 
       def to_h

@@ -1,7 +1,9 @@
 require 'lcdeploy/logging'
+require 'lcdeploy/steps/build_docker_image'
 require 'lcdeploy/steps/clone_repository'
 require 'lcdeploy/steps/create_directory'
 require 'lcdeploy/steps/run_command'
+require 'lcdeploy/steps/run_docker_container'
 
 module LCD
   class DSL
@@ -29,6 +31,14 @@ module LCD
     end
 
     # Step registration
+
+    def build_docker_image(name, params = {})
+      Steps::BuildDockerImage.new(name, params).register!(@ctx)
+    end
+
+    def run_docker_container(name, params = {})
+      Steps::RunDockerContainer.new(name, params).register!(@ctx)
+    end
 
     def clone_repository(source, params = {})
       Steps::CloneRepository.new(source, params).register!(@ctx)

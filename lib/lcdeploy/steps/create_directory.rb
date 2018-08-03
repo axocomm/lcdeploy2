@@ -1,3 +1,4 @@
+require 'lcdeploy/logging'
 require 'lcdeploy/step'
 
 module LCD
@@ -15,7 +16,7 @@ module LCD
       end
 
       def run!
-        puts "Would create directory #{@path}"
+        Log.debug "Would create directory #{@path}"
       end
 
       def to_h
