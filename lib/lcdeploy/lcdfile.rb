@@ -16,7 +16,10 @@ module LCD
     def run!
       eval!
       @ctx.run!
-    rescue StepRunFailed => e
+    rescue StepRunFailed => e # TODO: Fix error handling
+      Log.debug e
+      Log.error e.message
+    rescue DSLEvalFailed => e
       Log.debug e
       Log.error e.message
     end

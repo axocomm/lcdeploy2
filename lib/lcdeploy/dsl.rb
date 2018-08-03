@@ -46,6 +46,11 @@ module LCD
 
     def self.eval!(filename, ctx)
       new(ctx).instance_eval(File.read(filename))
+    rescue StandardError => e
+      raise DSLEvalFailed, e
     end
+  end
+
+  class DSLEvalFailed < StandardError
   end
 end
