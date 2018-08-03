@@ -2,8 +2,6 @@ require 'lcdeploy/params'
 
 module LCD
   class Step
-    @@param_schema = nil
-
     def initialize(params = {})
       err = validate_params(params)
       raise BadParams, err unless err.empty?
@@ -20,7 +18,7 @@ module LCD
     end
 
     def supports_user?
-      @@param_schema && @@param_schema.include?(:user)
+      param_schema && param_schema.include?(:user)
     end
 
     def default_user=(user)
@@ -28,11 +26,12 @@ module LCD
     end
 
     def self.parameters(&block)
-      @@param_schema = ParamSchema.new(&block)
+      schema = ParamSchema.new(&block)
+      class_eval { define_method(:param_schema) { schema } }
     end
 
     def validate_params(params)
-      @@param_schema && @@param_schema.validate(params)
+      param_schema && param_schema.validate(params)
     end
 
     def to_h

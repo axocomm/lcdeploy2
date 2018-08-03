@@ -13,18 +13,25 @@ module LCD
         super(params)
 
         @command = command
-        @user, @cwd = params.values_at(:user, :cwd)
       end
 
       def run!
         Log.debug "Would run #{@command}"
       end
 
+      def user
+        @params[:user]
+      end
+
+      def cwd
+        @params[:cwd]
+      end
+
       def to_h
         {
           command: @command,
-          user: @user,
-          cwd: @cwd
+          user: user,
+          cwd: cwd
         }
       end
     end
