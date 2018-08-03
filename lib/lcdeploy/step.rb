@@ -19,6 +19,14 @@ module LCD
       ctx.register!(self)
     end
 
+    def supports_user?
+      @@param_schema && @@param_schema.include?(:user)
+    end
+
+    def default_user=(user)
+      @params[:user] = user unless @params[:user]
+    end
+
     def self.parameters(&block)
       @@param_schema = ParamSchema.new(&block)
     end

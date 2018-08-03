@@ -8,9 +8,17 @@ module LCD
     def initialize
       @steps = []
       @config = {}
+      @current_user = nil
+    end
+
+    def switch_user!(user)
+      @current_user = user
     end
 
     def register!(step)
+      # If switch_user has been called, set the default user for the
+      # step.
+      step.default_user = @current_user if step.supports_user? && @current_user
       @steps << step
     end
 

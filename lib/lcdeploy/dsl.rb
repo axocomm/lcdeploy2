@@ -23,8 +23,9 @@ module LCD
       Log.log("[lcdfile] #{message}", level)
     end
 
-    def switch_user!(user)
-      Log.info "Switching to user #{user}"
+    def switch_user(user)
+      Log.info "Switching to user #{user}" unless user.nil?
+      @ctx.switch_user! user
     end
 
     # Step registration

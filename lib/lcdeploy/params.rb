@@ -20,6 +20,10 @@ module LCD
       end
     end
 
+    def include?(key)
+      @fields.include?(key)
+    end
+
     def to_h
       @fields.inject({}) do |acc, (field, spec)|
         acc.merge(field => spec.to_h)
