@@ -2,6 +2,7 @@ require 'lcdeploy/logging'
 require 'lcdeploy/steps/build_docker_image'
 require 'lcdeploy/steps/clone_repository'
 require 'lcdeploy/steps/create_directory'
+require 'lcdeploy/steps/render_template'
 require 'lcdeploy/steps/run_command'
 require 'lcdeploy/steps/run_docker_container'
 
@@ -50,6 +51,10 @@ module LCD
 
     def create_directory(path, params = {})
       Steps::CreateDirectory.new(path, params).register!(@ctx)
+    end
+
+    def render_template(local_file, params = {})
+      Steps::RenderTemplate.new(local_file, params).register!(@ctx)
     end
 
     # Evaluation
