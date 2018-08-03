@@ -31,7 +31,7 @@ module LCD
     end
 
     class FieldSpec
-      TYPES = %i[int float string symbol array] # For now
+      TYPES = %i[int float string symbol array hash] # For now
 
       attr_reader :type
 
@@ -74,6 +74,8 @@ module LCD
           val.is_a?(Symbol)
         when :array
           val.is_a?(Array)
+        when :hash
+          val.is_a?(Hash)
         else
           # This should never happen
           false
