@@ -1,5 +1,6 @@
 require 'lcdeploy/logging'
 require 'lcdeploy/steps/clone_repository'
+require 'lcdeploy/steps/create_directory'
 require 'lcdeploy/steps/run_command'
 
 module LCD
@@ -22,6 +23,10 @@ module LCD
       Log.log("[lcdfile] #{message}", level)
     end
 
+    def switch_user!(user)
+      Log.info "Switching to user #{user}"
+    end
+
     # Step registration
 
     def clone_repository(source, params = {})
@@ -31,6 +36,12 @@ module LCD
     def run_command(command, params = {})
       Steps::RunCommand.new(command, params).register!(@ctx)
     end
+
+    def create_directory(path, params = {})
+      Steps::CreateDirectory.new(path, params).register!(@ctx)
+    end
+
+    # Evaluation
 
     def self.eval!(filename, ctx)
       new(ctx).instance_eval(File.read(filename))
