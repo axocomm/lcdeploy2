@@ -43,6 +43,10 @@ module LCD
                 end
     end
 
+    def ssh_config
+      @config[:ssh]
+    end
+
     def to_h
       {
         steps: @steps.map(&:to_h),

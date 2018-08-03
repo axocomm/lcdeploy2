@@ -46,4 +46,20 @@ module LCD
     class BadParams < StandardError
     end
   end
+
+  class RemoteStep < Step
+    SSH_DEFAULTS = {
+      user: ENV['USER'],
+      port: 22
+    }
+
+    def register!(ctx)
+      super
+      @ssh_config = ctx.ssh_config
+    end
+
+    def ssh_config
+      SSH_DEFAULTS.merge(@ssh_config)
+    end
+  end
 end

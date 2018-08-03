@@ -3,7 +3,7 @@ require 'lcdeploy/step'
 
 module LCD
   module Steps
-    class BuildDockerImage < LCD::Step
+    class BuildDockerImage < LCD::RemoteStep
       parameters do
         cwd :string
         tag :string

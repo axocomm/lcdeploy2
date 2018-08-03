@@ -3,7 +3,7 @@ require 'lcdeploy/step'
 
 module LCD
   module Steps
-    class RunCommand < LCD::Step
+    class RunCommand < LCD::RemoteStep
       parameters do
         user :string
         cwd :string

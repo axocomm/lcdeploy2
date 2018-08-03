@@ -3,7 +3,7 @@ require 'lcdeploy/step'
 
 module LCD
   module Steps
-    class CloneRepository < LCD::Step
+    class CloneRepository < LCD::RemoteStep
       parameters do
         target :string, required: true
       end

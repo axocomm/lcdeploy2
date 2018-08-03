@@ -3,7 +3,7 @@ require 'lcdeploy/step'
 
 module LCD
   module Steps
-    class RunDockerContainer < LCD::Step
+    class RunDockerContainer < LCD::RemoteStep
       parameters do
         image :string, required: true
         tag :string

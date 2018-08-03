@@ -3,7 +3,7 @@ require 'lcdeploy/step'
 
 module LCD
   module Steps
-    class CreateDirectory < LCD::Step
+    class CreateDirectory < LCD::RemoteStep
       parameters do
         user :string
         group :string
