@@ -1,4 +1,5 @@
 require 'lcdeploy/steps/clone_repository'
+require 'lcdeploy/steps/run_command'
 
 module LCD
   class DSL
@@ -10,6 +11,10 @@ module LCD
 
     def clone_repository(source, params = {})
       Steps::CloneRepository.new(source, params).register!(@ctx)
+    end
+
+    def run_command(command, params = {})
+      Steps::RunCommand.new(command, params).register!(@ctx)
     end
 
     def self.eval!(filename, ctx)
