@@ -16,6 +16,9 @@ module LCD
     def run!
       eval!
       @ctx.run!
+    rescue StepRunFailed => e
+      Log.debug e
+      Log.error e.message
     end
 
     private

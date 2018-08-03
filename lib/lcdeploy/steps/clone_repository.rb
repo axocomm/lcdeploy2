@@ -11,6 +11,14 @@ module LCD
         super(params)
         @repository = repository
       end
+
+      def run!
+        puts "Would clone_repository #{@repository}"
+      end
+
+      def to_h
+        { repository: @repository }.merge(super.to_h)
+      end
     end
   end
 end

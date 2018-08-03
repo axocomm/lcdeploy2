@@ -31,6 +31,11 @@ module LCD
       @params
     end
 
+    def to_s
+      str = to_h.map { |(k, v)| [k.to_s, v].join('=') }.join(',')
+      "#{self.class.name.split(/::/).last}[#{str}]"
+    end
+
     class BadParams < StandardError
     end
   end
