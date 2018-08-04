@@ -29,6 +29,7 @@ class Net::SSH::Connection::Session
 
   class CommandExecutionFailed < StandardError
   end
+
   class CommandFailed < StandardError
   end
 end
