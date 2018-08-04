@@ -23,7 +23,8 @@ module LCD
     desc 'deploy LCDFILE', 'Deploy from an lcdfile'
     def deploy(filename = 'Lcdfile')
       Log.info "Deploying from #{filename}"
-      Lcdfile.new(filename).run!
+      result = Lcdfile.new(filename).run!
+      puts result.to_h
     end
 
     private

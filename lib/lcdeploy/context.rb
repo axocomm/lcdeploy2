@@ -28,7 +28,7 @@ module LCD
         begin
           step.run!
         rescue StandardError => e
-          raise StepRunFailed, step, e
+          raise StepRunFailed.new(step, e)
         end
       end
     end
