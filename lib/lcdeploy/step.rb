@@ -1,4 +1,5 @@
 require 'lcdeploy/params'
+require 'lcdeploy/ssh'
 
 module LCD
   class Step
@@ -60,6 +61,10 @@ module LCD
 
     def ssh_config
       SSH_DEFAULTS.merge(@ssh_config)
+    end
+
+    def ssh_exec(cmd)
+      LCD::SSH.ssh_exec(cmd, ssh_config)
     end
   end
 end

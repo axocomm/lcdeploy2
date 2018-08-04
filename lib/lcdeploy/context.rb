@@ -44,7 +44,7 @@ module LCD
     end
 
     def ssh_config
-      @config[:ssh]
+      @config[:ssh] || {}
     end
 
     def to_h
