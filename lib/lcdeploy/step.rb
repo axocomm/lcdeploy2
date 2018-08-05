@@ -8,14 +8,19 @@ module LCD
     end
 
     def validate_params!(params)
-      param_schema && param_schema.validate!(params)
+      if param_spec
+        Log.debug "Validating #{params} using #{param_spec}"
+        param_spec.validate!(params)
+      else
+        Log.warning "No schema specified for #{self.class.name}"
+      end
     end
 
     def run!
       raise NotImplementedError
     end
 
-    def param_schema
+    def param_spec
       nil
     end
 
@@ -25,7 +30,7 @@ module LCD
 
     # TODO: Better way to do this?
     def as_user(user)
-      param_schema && param_schema.maybe_set_default!(user: user)
+      param_spec && param_spec.maybe_set_default!(:user, user)
       self
     end
   end
