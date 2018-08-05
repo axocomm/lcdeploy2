@@ -24,7 +24,7 @@ module LCD
     end
 
     def log(message, level = :info)
-      Logging.logger(:lcdfile).log(message, level)
+      Logging[:lcdfile].log(message, level)
     end
 
     def switch_user(user)

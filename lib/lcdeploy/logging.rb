@@ -64,12 +64,12 @@ module LCD
         @@config[:level]
       end
 
-      def self.[](name)
+      def self.logger(name)
         @@loggers[name] || (@@loggers[name] = Logger.new(name))
       end
 
       def self.root_logger
-        @@loggers[:root]
+        logger(:root)
       end
 
       def self.configure!(params = {})
@@ -104,7 +104,11 @@ module LCD
       end
 
       def logger(name)
-        LoggerManager[name]
+        LoggerManager.logger(name)
+      end
+
+      def [](name)
+        logger(name)
       end
     end
   end
