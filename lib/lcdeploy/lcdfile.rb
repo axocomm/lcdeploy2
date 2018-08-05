@@ -8,9 +8,18 @@ module LCD
       @ctx = Context.new
     end
 
-    def preview
+    def preview(params = {})
       eval!
-      puts @ctx.to_h
+
+      # TODO: Default should be a simpler printout like rupervisor
+      case params[:format]
+      when /json/
+        puts @ctx.to_json
+      when /yaml/
+        puts @ctx.to_yaml
+      else
+        puts @ctx.to_h
+      end
     end
 
     def run!
@@ -18,10 +27,11 @@ module LCD
       RunSucceeded.new @ctx.run!
     rescue StepFailed => e # TODO: Fix error handling
       Log.debug e
-      e.dump if @ctx.debug
+      raise if @ctx.debug
       RunFailed.new e
     rescue DSLEvalFailed => e
       Log.debug e
+      raise if @ctx.debug
       RunFailed.new e
     end
 
