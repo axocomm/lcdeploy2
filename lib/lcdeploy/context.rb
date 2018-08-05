@@ -56,8 +56,17 @@ module LCD
     def to_h
       {
         steps: @steps.map(&:to_h),
-        config: @config
+        config: @config,
+        debug: @debug
       }
+    end
+
+    def to_json
+      to_h.to_json
+    end
+
+    def to_yaml
+      JSON.parse(to_json).to_yaml
     end
 
     def self.load_yaml(filename)
