@@ -39,6 +39,10 @@ module LCD
         @options[:default] = val
       end
 
+      def has_default?
+        @options.include?(:default)
+      end
+
       def validate!(exists, val)
         if required? && !exists
           raise FieldSpecError, "No value provided for #{@name}"

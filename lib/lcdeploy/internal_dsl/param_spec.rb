@@ -41,6 +41,21 @@ module LCD
         raise
       end
 
+      # Prepare passed parameters and merge defaults.
+      #
+      # TODO: This should also eventually perform any conversions,
+      # etc. registered in the parameters block?
+      def prepare(params)
+        defaults.merge(params)
+      end
+
+      def defaults
+        @fields.inject({}) do |acc, (f, s)|
+          acc[f] = s.default if s.has_default?
+          acc
+        end
+      end
+
       def to_h
         Hash[@fields.map { |k, s| [k, s.to_h] }]
       end

@@ -3,8 +3,10 @@ require 'lcdeploy/errors'
 module LCD
   class Step
     def initialize(params = {})
-      validate_params!(params)
-      @params = params
+      if param_spec
+        validate_params!(params)
+        @params = param_spec.prepare(params)
+      end
     end
 
     def validate_params!(params)
