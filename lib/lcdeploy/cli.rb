@@ -16,14 +16,16 @@ module LCD
     end
 
     desc 'preview LCDFILE', 'Preview deploy steps'
+    option :format, aliases: :f
     def preview(filename = 'Lcdfile')
-      Lcdfile.new(filename).preview
+      Lcdfile.new(filename).preview(format: options[:format])
     end
 
     desc 'deploy LCDFILE', 'Deploy from an lcdfile'
     def deploy(filename = 'Lcdfile')
       Log.info "Deploying from #{filename}"
-      Lcdfile.new(filename).run!
+      result = Lcdfile.new(filename).run!
+      puts result.to_h
     end
 
     private

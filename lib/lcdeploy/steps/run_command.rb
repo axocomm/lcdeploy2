@@ -1,39 +1,20 @@
+require 'lcdeploy/internal_dsl'
 require 'lcdeploy/logging'
-require 'lcdeploy/step'
 
-module LCD
-  module Steps
-    class RunCommand < LCD::Step
-      parameters do
-        user :string
-        cwd :string
-      end
+defstep :run_command do
+  remote_step!
 
-      def initialize(command, params = {})
-        super(params)
+  parameters do
+    command :string, required: true
+    user :string, default: ENV['USER']
+  end
 
-        @command = command
-      end
+  label_param :command
 
-      def run!
-        Log.debug "Would run #{@command}"
-      end
+  run do
+    log_debug "Using SSH config #{@ssh_config}"
+    log_debug "Running command #{@command} as #{@user}"
 
-      def user
-        @params[:user]
-      end
-
-      def cwd
-        @params[:cwd]
-      end
-
-      def to_h
-        {
-          command: @command,
-          user: user,
-          cwd: cwd
-        }
-      end
-    end
+    ssh_exec @command
   end
 end

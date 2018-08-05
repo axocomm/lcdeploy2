@@ -3,12 +3,13 @@ require 'yaml'
 
 module LCD
   class Context
-    attr_reader :config
+    attr_reader :config, :debug, :current_user
 
     def initialize
       @steps = []
       @config = {}
       @current_user = nil
+      @debug = true # TODO: Pass debug from CLI
     end
 
     def switch_user!(user)
@@ -16,20 +17,25 @@ module LCD
     end
 
     def register!(step)
-      # If switch_user has been called, set the default user for the
-      # step.
-      step.default_user = @current_user if step.supports_user? && @current_user
       @steps << step
     end
 
     def run!
-      @steps.map do |step|
+      @steps.inject(run: [], skipped: []) do |acc, step|
         Log.info "Running step #{step}"
         begin
-          step.run!
-        rescue StandardError => e
-          raise StepRunFailed, step, e
+          acc[:run] << [step, step.run!]
+        rescue StepSkipped => e
+          acc[:skipped] << [step, e.reason]
+        rescue StepFailed => e
+          Log.error "Step #{step} failed with #{e.type}"
+          raise
+        rescue StandardError
+          Log.error "An exception occurred running #{step}"
+          raise
         end
+
+        acc
       end
     end
 
@@ -43,11 +49,24 @@ module LCD
                 end
     end
 
+    def ssh_config
+      @config[:ssh] || {}
+    end
+
     def to_h
       {
         steps: @steps.map(&:to_h),
-        config: @config
+        config: @config,
+        debug: @debug
       }
+    end
+
+    def to_json
+      to_h.to_json
+    end
+
+    def to_yaml
+      JSON.parse(to_json).to_yaml
     end
 
     def self.load_yaml(filename)
@@ -60,20 +79,6 @@ module LCD
       File.open(filename) do |fh|
         JSON.parse(fh.read, symbolize_names: true)
       end
-    end
-  end
-
-  class StepRunFailed < StandardError
-    attr_reader :step, :exception
-
-    def initialize(step, exception, *args)
-      super(*args)
-      @step = step
-      @exception = exception
-    end
-
-    def message
-      "Step #{step} failed with #{e}"
     end
   end
 end
