@@ -1,4 +1,9 @@
 module LCD
+
+  #########
+  # Steps #
+  #########
+
   class StepFailed < StandardError
     attr_reader :step, :error
 
@@ -55,5 +60,15 @@ EOT
     def message
       "Step #{step} skipped: #{@reason}"
     end
+  end
+
+  #######
+  # SSH #
+  #######
+
+  class CommandExecutionFailed < StandardError
+  end
+
+  class CommandFailed < StandardError
   end
 end

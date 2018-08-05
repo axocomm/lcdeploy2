@@ -1,5 +1,6 @@
 require 'net/ssh'
 
+require 'lcdeploy/errors'
 require 'lcdeploy/logging'
 
 class Net::SSH::Connection::Session
@@ -25,12 +26,6 @@ class Net::SSH::Connection::Session
                                    stdout: stdout.chomp,
                                    stderr: stderr.chomp,
                                    exit_code: rv
-  end
-
-  class CommandExecutionFailed < StandardError
-  end
-
-  class CommandFailed < StandardError
   end
 end
 

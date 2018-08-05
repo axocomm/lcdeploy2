@@ -1,4 +1,5 @@
 require 'lcdeploy/errors'
+require 'lcdeploy/ssh'
 
 module LCD
   class Step
@@ -34,6 +35,30 @@ module LCD
     def as_user(user)
       param_spec && param_spec.maybe_set_default!(:user, user)
       self
+    end
+  end
+
+  class RemoteStep < Step
+    SSH_DEFAULTS = {
+      user: ENV['USER'],
+      port: 22
+    }
+
+    def register!(ctx)
+      super
+      @ssh_config = ctx.ssh_config
+    end
+
+    def ssh_config
+      SSH_DEFAULTS.merge(@ssh_config)
+    end
+
+    def ssh_exec(cmd)
+      result = LCD::SSH.ssh_exec(cmd, ssh_config)
+      unless result.success?
+        Log.error "SSH command #{cmd} failed with #{result.exit_code}"
+        raise StepFailed.new(self, ssh_result: result)
+      end
     end
   end
 

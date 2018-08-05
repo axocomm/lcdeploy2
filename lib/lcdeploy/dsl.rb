@@ -4,7 +4,7 @@ require 'lcdeploy/logging'
 # require 'lcdeploy/steps/create_directory'
 require 'lcdeploy/steps/print_date'
 # require 'lcdeploy/steps/render_template'
-# require 'lcdeploy/steps/run_command'
+require 'lcdeploy/steps/run_command'
 # require 'lcdeploy/steps/run_docker_container'
 
 module LCD
@@ -46,9 +46,9 @@ module LCD
     #   Steps::CloneRepository.new(source, params).register!(@ctx)
     # end
 
-    # def run_command(command, params = {})
-    #   Steps::RunCommand.new(command, params).register!(@ctx)
-    # end
+    def run_command(command, params = {})
+      Steps::RunCommand.new(command, params).register!(@ctx)
+    end
 
     # def create_directory(path, params = {})
     #   Steps::CreateDirectory.new(path, params).register!(@ctx)

@@ -15,6 +15,8 @@ module LCD
         @command = nil
         @run_block = nil
 
+        @remote_step = false
+
         instance_eval(&block)
       end
 
@@ -29,6 +31,10 @@ module LCD
         @label_param = name.to_sym
       end
 
+      def remote_step!
+        @remote_step = true
+      end
+
       def ssh_command(&block)
         @command = block
       end
@@ -39,8 +45,16 @@ module LCD
 
       # Class generation
 
+      def superclass
+        if @remote_step
+          LCD::RemoteStep
+        else
+          LCD::Step
+        end
+      end
+
       def classify!
-        klass = LCD::Steps.const_set(@class_name, Class.new(LCD::Step))
+        klass = LCD::Steps.const_set(@class_name, Class.new(superclass))
         label_param = @label_param
         attrs = [label_param, :params]
 
