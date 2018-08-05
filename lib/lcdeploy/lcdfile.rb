@@ -26,11 +26,11 @@ module LCD
       eval!
       RunSucceeded.new @ctx.run!
     rescue StepFailed => e # TODO: Fix error handling
-      Log.debug e
+      Logging.debug e
       raise if @ctx.debug
       RunFailed.new e
     rescue DSLEvalFailed => e
-      Log.debug e
+      Logging.debug e
       raise if @ctx.debug
       RunFailed.new e
     end

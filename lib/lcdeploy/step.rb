@@ -12,10 +12,10 @@ module LCD
 
     def validate_params!(params)
       if param_spec
-        Log.debug "Validating #{params} using #{param_spec}"
+        Logging.debug "Validating #{params} using #{param_spec}"
         param_spec.validate!(params)
       else
-        Log.warning "No schema specified for #{self.class.name}"
+        Logging.warning "No schema specified for #{self.class.name}"
       end
     end
 
@@ -63,7 +63,7 @@ module LCD
     def ssh_exec(cmd)
       result = LCD::SSH.ssh_exec(cmd, @ssh_config)
       unless result.success?
-        Log.error "SSH command #{cmd} failed with #{result.exit_code}"
+        Logging.error "SSH command #{cmd} failed with #{result.exit_code}"
         raise StepFailed.new(self, ssh_result: result)
       end
     end

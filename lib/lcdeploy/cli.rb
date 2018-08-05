@@ -23,7 +23,7 @@ module LCD
 
     desc 'deploy LCDFILE', 'Deploy from an lcdfile'
     def deploy(filename = 'Lcdfile')
-      Log.info "Deploying from #{filename}"
+      Logging.info "Deploying from #{filename}"
       result = Lcdfile.new(filename).run!
       puts result.to_h
     end
@@ -32,9 +32,9 @@ module LCD
 
     def configure_logging!
       if options[:verbose]
-        Log.configure! verbose: true
+        Logging.configure! verbose: true
       elsif options[:quiet]
-        Log.configure! quiet: true
+        Logging.configure! quiet: true
       end
     end
   end

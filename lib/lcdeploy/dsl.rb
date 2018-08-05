@@ -24,11 +24,11 @@ module LCD
     end
 
     def log(message, level = :info)
-      Log.log("[lcdfile] #{message}", level)
+      Logging.logger(:lcdfile).log(message, level)
     end
 
     def switch_user(user)
-      Log.info "Switching to user #{user}" unless user.nil?
+      Logging.info "Switching to user #{user}" unless user.nil?
       @ctx.switch_user! user
     end
 
