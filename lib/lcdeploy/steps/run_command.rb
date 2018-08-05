@@ -1,4 +1,5 @@
 require 'lcdeploy/internal_dsl'
+require 'lcdeploy/logging'
 
 defstep :run_command do
   remote_step!
@@ -11,7 +12,7 @@ defstep :run_command do
   label_param :command
 
   run do
-    puts "Fucking user is #{@user} and command is #{@command}"
-    puts "Params #{@params}"
+    log_debug "Using SSH config #{@ssh_config}"
+    log_debug "Running command #{@command} as #{@user}"
   end
 end
