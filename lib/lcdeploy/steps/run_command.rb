@@ -11,6 +11,7 @@ defstep :run_command do
   label_param :command
 
   run do
-    puts 'Fuck you'
+    puts "Fucking user is #{@user} and command is #{@command}"
+    puts "Params #{@params}"
   end
 end

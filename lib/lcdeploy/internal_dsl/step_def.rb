@@ -12,7 +12,6 @@ module LCD
 
         @label_param = nil
         @param_spec = nil
-        @command = nil
         @run_block = nil
 
         @remote_step = false
@@ -33,10 +32,6 @@ module LCD
 
       def remote_step!
         @remote_step = true
-      end
-
-      def ssh_command(&block)
-        @command = block
       end
 
       def run(&block)
@@ -64,15 +59,18 @@ module LCD
         Log.warning "Registering #{@class_name} expecting #{attrs}"
 
         klass.class_eval do
-          attr_accessor *attrs
+          attr_reader *attrs
 
           define_method(:initialize) do |label, params = {}|
             Log.info "Creates a new #{klass}"
             super(params.merge(label_param => label))
+
+            @params.each do |p, v|
+              instance_variable_set("@#{p}", v)
+            end
           end
 
           define_method(:param_spec) { param_spec }
-
           define_method(:run!, run_block)
         end
       end
@@ -82,7 +80,6 @@ module LCD
           name: @name,
           class_name: @class_name,
           param_spec: @param_spec.to_h,
-          ssh_command: @command,
           run_block: @run_block
         }
       end
