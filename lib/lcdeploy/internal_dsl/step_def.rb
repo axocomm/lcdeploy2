@@ -53,9 +53,8 @@ module LCD
           attr_accessor *attrs
 
           define_method(:initialize) do |label, params = {}|
-            param_spec.validate!(params)
-            instance_variable_set("@#{label_param}", label)
-            instance_variable_set('@params', params)
+            Log.info "Creates a new #{klass}"
+            super(params.merge(label_param => label))
           end
 
           define_method(:param_spec) { param_spec }

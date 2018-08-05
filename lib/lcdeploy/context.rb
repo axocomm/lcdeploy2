@@ -3,7 +3,7 @@ require 'yaml'
 
 module LCD
   class Context
-    attr_reader :config, :debug
+    attr_reader :config, :debug, :current_user
 
     def initialize
       @steps = []
@@ -17,9 +17,6 @@ module LCD
     end
 
     def register!(step)
-      # If switch_user has been called, set the default user for the
-      # step.
-      step.default_user = @current_user if step.supports_user? && @current_user
       @steps << step
     end
 

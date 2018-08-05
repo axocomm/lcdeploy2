@@ -9,6 +9,20 @@ module LCD
         instance_eval(&block)
       end
 
+      def include?(field)
+        @fields.include?(field)
+      end
+
+      def set_default!(field, val)
+        field = @fields[field]
+        raise FieldOptionError, "#{field} does not exist" unless field
+        field.default = val
+      end
+
+      def maybe_set_default!(field, val)
+        include?(field) && set_default!(field, val)
+      end
+
       def method_missing(field, *args)
         add_field!(field, *args)
       end
