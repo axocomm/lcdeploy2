@@ -14,5 +14,7 @@ defstep :run_command do
   run do
     log_debug "Using SSH config #{@ssh_config}"
     log_debug "Running command #{@command} as #{@user}"
+
+    ssh_exec @command
   end
 end

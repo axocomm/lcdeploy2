@@ -61,7 +61,7 @@ module LCD
     end
 
     def ssh_exec(cmd)
-      result = LCD::SSH.ssh_exec(cmd, ssh_config)
+      result = LCD::SSH.ssh_exec(cmd, @ssh_config)
       unless result.success?
         Log.error "SSH command #{cmd} failed with #{result.exit_code}"
         raise StepFailed.new(self, ssh_result: result)
