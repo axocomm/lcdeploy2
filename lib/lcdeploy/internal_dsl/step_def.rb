@@ -57,7 +57,7 @@ module LCD
         param_spec = @param_spec
         run_block = @run_block
 
-        Log.warning "Registering #{@class_name} expecting #{attrs}"
+        Log.debug "Registering #{@class_name} expecting #{attrs}"
 
         klass.class_eval do
           attr_reader *attrs
@@ -75,6 +75,8 @@ module LCD
           define_method(:run!, run_block)
           define_method(:step_type) { step_type }
         end
+
+        klass
       end
 
       def to_h

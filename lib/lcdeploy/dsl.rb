@@ -70,7 +70,4 @@ module LCD
       raise
     end
   end
-
-  class DSLEvalFailed < StandardError
-  end
 end

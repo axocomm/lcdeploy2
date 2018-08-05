@@ -1,5 +1,12 @@
 module LCD
 
+  ##################
+  # DSL Evaluation #
+  ##################
+
+  class DSLEvalFailed < StandardError
+  end
+
   #########
   # Steps #
   #########
@@ -60,6 +67,13 @@ EOT
     def message
       "Step #{step} skipped: #{@reason}"
     end
+  end
+
+  #################
+  # Step Registry #
+  #################
+
+  class NoSuchStep < StandardError
   end
 
   #######
