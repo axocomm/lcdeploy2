@@ -36,6 +36,17 @@ module LCD
       param_spec && param_spec.maybe_set_default!(:user, user)
       self
     end
+
+    def step_type
+      nil
+    end
+
+    def to_h
+      {
+        type: step_type,
+        params: @params
+      }
+    end
   end
 
   class RemoteStep < Step
@@ -46,11 +57,7 @@ module LCD
 
     def register!(ctx)
       super
-      @ssh_config = ctx.ssh_config
-    end
-
-    def ssh_config
-      SSH_DEFAULTS.merge(@ssh_config)
+      @ssh_config = SSH_DEFAULTS.merge(ctx.ssh_config)
     end
 
     def ssh_exec(cmd)
@@ -59,6 +66,11 @@ module LCD
         Log.error "SSH command #{cmd} failed with #{result.exit_code}"
         raise StepFailed.new(self, ssh_result: result)
       end
+    end
+
+    # TODO: Should probably not need to have this
+    def to_h
+      super.merge(remote: true)
     end
   end
 

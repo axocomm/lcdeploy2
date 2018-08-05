@@ -49,6 +49,7 @@ module LCD
       end
 
       def classify!
+        step_type = @name
         klass = LCD::Steps.const_set(@class_name, Class.new(superclass))
         label_param = @label_param
         attrs = [label_param, :params]
@@ -72,6 +73,7 @@ module LCD
 
           define_method(:param_spec) { param_spec }
           define_method(:run!, run_block)
+          define_method(:step_type) { step_type }
         end
       end
 
