@@ -1,11 +1,4 @@
 require 'lcdeploy/logging'
-# require 'lcdeploy/steps/build_docker_image'
-# require 'lcdeploy/steps/clone_repository'
-# require 'lcdeploy/steps/create_directory'
-# require 'lcdeploy/steps/print_date'
-# require 'lcdeploy/steps/render_template'
-# require 'lcdeploy/steps/run_command'
-# require 'lcdeploy/steps/run_docker_container'
 
 module LCD
   class DSL

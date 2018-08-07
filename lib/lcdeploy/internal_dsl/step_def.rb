@@ -76,7 +76,7 @@ module LCD
           define_method(:step_type) { step_type }
         end
 
-        klass
+        [@name, klass]
       end
 
       def to_h
