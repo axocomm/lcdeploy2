@@ -4,6 +4,7 @@ module LCD
   module Logging
     class Logger
       LEVELS = {
+        silly: ['~~>', :blue],
         debug: ['==>', :white],
         info: ['===', :green],
         warning: ['===', :yellow],
@@ -92,6 +93,8 @@ module LCD
 
       def configure!(params)
         logger_params = case params[:mode]
+                        when :silly
+                          { level: :silly }
                         when :verbose
                           { level: :debug }
                         when :quiet

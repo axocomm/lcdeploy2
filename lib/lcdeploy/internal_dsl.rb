@@ -13,9 +13,8 @@ module LCD
       # DSL Methods
 
       def defstep(name, &block)
-        step = LCD::InternalDSL::StepDef.new(name, &block)
-        logger.info "Created #{step}"
-        step.classify!
+        logger.silly "Defining new step #{name}"
+        LCD::InternalDSL::StepDef.new(name, &block).classify!
       end
 
       def self.eval!(filename, registry)

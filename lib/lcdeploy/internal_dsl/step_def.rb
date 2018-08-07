@@ -66,7 +66,7 @@ module LCD
           attr_reader *attrs
 
           define_method(:initialize) do |label, params = {}|
-            log_info "Creating a new #{klass}"
+            log_debug "Creating a new #{klass}"
             super(params.merge(label_param => label))
 
             @params.each do |p, v|
@@ -78,7 +78,7 @@ module LCD
           define_method(:run!, run_block)
           define_method(:step_type) { step_type }
 
-          %i[debug info warning error].each do |level|
+          %i[silly debug info warning error].each do |level|
             define_method("log_#{level}".to_sym) do |msg|
               step_logger.log(msg, level)
             end

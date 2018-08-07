@@ -27,21 +27,21 @@ module LCD
 
     def register_all!
       glob = "#{step_dir}/*.rb"
-      logger.info "Loading steps from #{glob}"
+      logger.debug 'Registering steps'
+      logger.silly "Loading steps from #{glob}"
       Dir.glob(glob).each { |file| register_step!(file) }
     end
 
     def register_step!(filename)
-      puts 'fuck'
-      logger.info "Registering step(s) from #{filename}"
+      logger.silly "Registering step(s) from #{filename}"
 
       name, klass = InternalDSL::StepsDSL.eval!(filename, self)
       add!(name, klass)
     end
 
     def add!(name, klass)
-      logger.info "Registering #{name}"
       @step_types[name] = klass
+      logger.info "Registered step type #{name}"
     end
 
     def step_dir

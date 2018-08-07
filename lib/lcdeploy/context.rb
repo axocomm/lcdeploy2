@@ -16,7 +16,7 @@ module LCD
       @current_user = nil
       @debug = true # TODO: Pass debug from CLI
 
-      logger.info 'Creating a new StepRegistry'
+      logger.silly 'Creating a new StepRegistry'
       @step_registry = StepRegistry.new
       @step_registry.register_all!
     end
@@ -39,17 +39,17 @@ module LCD
 
     def run!
       @steps.inject(run: [], skipped: []) do |acc, step|
-        # TODO: Use ModuleLogger
-        Logging.info "Running step #{step}"
+        logger.info "Running step #{step}"
+
         begin
           acc[:run] << [step, step.run!]
         rescue StepSkipped => e
           acc[:skipped] << [step, e.reason]
         rescue StepFailed => e
-          Logging.error "Step #{step} failed with #{e.type}"
+          logger.error "Step #{step} failed with #{e.type}"
           raise
         rescue StandardError
-          Logging.error "An exception occurred running #{step}"
+          logger.error "An exception occurred running #{step}"
           raise
         end
 

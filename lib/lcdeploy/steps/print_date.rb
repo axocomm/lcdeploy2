@@ -8,6 +8,6 @@ defstep :print_date do
   label_param :date_format
 
   run do
-    puts 'running'
+    log_debug 'Would run it'
   end
 end
