@@ -21,17 +21,20 @@ module LCD
       @step_registry.register_all!
     end
 
-    def step?(name)
-      @step_registry.include?(name)
-    end
-
     def switch_user!(user)
       @current_user = user
     end
 
-    def enqueue!(step_name, *args)
-      cls = @step_registry[step_name]
-      @steps << cls.new(*args)
+    def step?(name)
+      @step_registry.include?(name)
+    end
+
+    def enqueue_step!(name, *args)
+      @step_registry[name].new(*args).enqueue!(self)
+    end
+
+    def enqueue!(step)
+      @steps << step
     end
 
     def run!
