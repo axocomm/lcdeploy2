@@ -112,4 +112,11 @@ module LCD
       end
     end
   end
+
+  module ModuleLogger
+    def logger
+      label = File.basename(caller_locations(1, 1)[0].path, '.rb')
+      Logging::LoggerManager.logger(label)
+    end
+  end
 end
