@@ -27,8 +27,8 @@ module LCD
       nil
     end
 
-    def register!(ctx)
-      ctx.register!(as_user(ctx.current_user))
+    def enqueue!(ctx)
+      ctx.enqueue!(as_user(ctx.current_user))
     end
 
     # TODO: Better way to do this?
@@ -55,7 +55,7 @@ module LCD
       port: 22
     }
 
-    def register!(ctx)
+    def enqueue!(ctx)
       super
       @ssh_config = SSH_DEFAULTS.merge(ctx.ssh_config)
     end

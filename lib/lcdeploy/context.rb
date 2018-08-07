@@ -1,8 +1,13 @@
 require 'json'
 require 'yaml'
 
+require 'lcdeploy/logging'
+require 'lcdeploy/step_registry'
+
 module LCD
   class Context
+    include ModuleLogger
+
     attr_reader :config, :debug, :current_user
 
     def initialize
@@ -10,18 +15,28 @@ module LCD
       @config = {}
       @current_user = nil
       @debug = true # TODO: Pass debug from CLI
+
+      logger.info 'Creating a new StepRegistry'
+      @step_registry = StepRegistry.new
+      @step_registry.register_all!
+    end
+
+    def step?(name)
+      @step_registry.include?(name)
     end
 
     def switch_user!(user)
       @current_user = user
     end
 
-    def register!(step)
-      @steps << step
+    def enqueue!(step_name, *args)
+      cls = @step_registry[step_name]
+      @steps << cls.new(*args)
     end
 
     def run!
       @steps.inject(run: [], skipped: []) do |acc, step|
+        # TODO: Use ModuleLogger
         Logging.info "Running step #{step}"
         begin
           acc[:run] << [step, step.run!]
