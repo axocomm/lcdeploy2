@@ -83,6 +83,10 @@ module LCD
               step_logger.log(msg, level)
             end
           end
+
+          define_method(:to_s) do
+            "#{self.class.name}[#{@params[label_param]}]"
+          end
         end
 
         [@name, klass]
