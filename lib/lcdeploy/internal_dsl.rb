@@ -18,13 +18,6 @@ module LCD
         step.classify!
       end
 
-      %w[debug info warning error].each do |level|
-        puts "Registers log_#{level}"
-        define_method("log_#{level}".to_sym) do |msg|
-          LCD::Logging[:steps_dsl].log(msg, level)
-        end
-      end
-
       def self.eval!(filename, registry)
         new(registry).instance_eval(File.read(filename))
       end

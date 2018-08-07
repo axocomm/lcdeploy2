@@ -12,9 +12,7 @@ defstep :run_command do
   label_param :command
 
   run do
-    # log_debug "Using SSH config #{@ssh_config}"
-    # log_debug "Running command #{@command} as #{@user}"
-
+    log_debug "Running command #{@command} as #{@user}"
     ssh_exec @command
   end
 end

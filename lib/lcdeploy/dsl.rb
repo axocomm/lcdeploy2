@@ -37,7 +37,6 @@ module LCD
     end
 
     def enqueue_step!(step_name, *args)
-      # TODO: Ew
       @ctx.enqueue_step!(step_name, *args)
     end
 
