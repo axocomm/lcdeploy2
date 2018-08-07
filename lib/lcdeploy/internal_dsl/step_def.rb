@@ -35,6 +35,18 @@ module LCD
         @remote_step = true
       end
 
+      def run_ssh(&block)
+        unless @remote_step
+          raise StepAttributeInvalid, 'run_ssh may only be used on remote steps'
+        end
+
+        run do
+          cmd = instance_eval(&block)
+          log_debug "Generated SSH command #{cmd}"
+          ssh_exec cmd
+        end
+      end
+
       def run(&block)
         @run_block = block
       end

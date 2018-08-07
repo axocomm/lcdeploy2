@@ -3,6 +3,9 @@ module LCD
     class StepDefError < StandardError
     end
 
+    class StepAttributeInvalid < StepDefError
+    end
+
     class ParamSpecError < StepDefError
     end
 

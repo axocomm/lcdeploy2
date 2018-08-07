@@ -42,9 +42,13 @@ module LCD
         logger.info "Running step #{step}"
 
         begin
-          acc[:run] << [step, step.run!]
+          result = step.run!
+          logger.info "Run result was #{result}"
+          acc[:run] << [step, result]
         rescue StepSkipped => e
-          acc[:skipped] << [step, e.reason]
+          reason = e.reason
+          logger.info "Step skipped: #{reason}"
+          acc[:skipped] << [step, reason]
         rescue StepFailed => e
           logger.error "Step #{step} failed with #{e.type}"
           raise
