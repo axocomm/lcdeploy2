@@ -8,5 +8,5 @@ def defstep(name, &block)
 end
 
 %i[debug info warning error].each do |level|
-  define_method("log_#{level}".to_sym) { |msg| LCD::Log.log(msg, level) }
+  define_method("log_#{level}".to_sym) { |msg| LCD::Logging.log(msg, level) }
 end

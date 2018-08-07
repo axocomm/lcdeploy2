@@ -22,16 +22,16 @@ module LCD
 
     def run!
       @steps.inject(run: [], skipped: []) do |acc, step|
-        Log.info "Running step #{step}"
+        Logging.info "Running step #{step}"
         begin
           acc[:run] << [step, step.run!]
         rescue StepSkipped => e
           acc[:skipped] << [step, e.reason]
         rescue StepFailed => e
-          Log.error "Step #{step} failed with #{e.type}"
+          Logging.error "Step #{step} failed with #{e.type}"
           raise
         rescue StandardError
-          Log.error "An exception occurred running #{step}"
+          Logging.error "An exception occurred running #{step}"
           raise
         end
 

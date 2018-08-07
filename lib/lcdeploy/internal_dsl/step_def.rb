@@ -57,13 +57,13 @@ module LCD
         param_spec = @param_spec
         run_block = @run_block
 
-        Log.debug "Registering #{@class_name} expecting #{attrs}"
+        Logging.debug "Registering #{@class_name} expecting #{attrs}"
 
         klass.class_eval do
           attr_reader *attrs
 
           define_method(:initialize) do |label, params = {}|
-            Log.info "Creates a new #{klass}"
+            Logging.info "Creates a new #{klass}"
             super(params.merge(label_param => label))
 
             @params.each do |p, v|

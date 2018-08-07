@@ -9,8 +9,11 @@ require 'lcdeploy/steps/run_command'
 
 module LCD
   class DSL
+    include ModuleLogger
+
     def initialize(ctx)
       @ctx = ctx
+      logger.debug('Initializing a new DSL')
     end
 
     # Context actions
@@ -24,11 +27,11 @@ module LCD
     end
 
     def log(message, level = :info)
-      Log.log("[lcdfile] #{message}", level)
+      Logging[:lcdfile].log(message, level)
     end
 
     def switch_user(user)
-      Log.info "Switching to user #{user}" unless user.nil?
+      logger.info "Switching to user #{user}" unless user.nil?
       @ctx.switch_user! user
     end
 
@@ -66,8 +69,6 @@ module LCD
 
     def self.eval!(filename, ctx)
       new(ctx).instance_eval(File.read(filename))
-    rescue StandardError => e
-      raise
     end
   end
 end
