@@ -1,8 +1,13 @@
 require 'json'
 require 'yaml'
 
+require 'lcdeploy/logging'
+require 'lcdeploy/step_registry'
+
 module LCD
   class Context
+    include ModuleLogger
+
     attr_reader :config, :debug, :current_user
 
     def initialize
@@ -10,28 +15,41 @@ module LCD
       @config = {}
       @current_user = nil
       @debug = true # TODO: Pass debug from CLI
+
+      logger.silly 'Creating a new StepRegistry'
+      @step_registry = StepRegistry.new
+      @step_registry.register_all!
     end
 
     def switch_user!(user)
       @current_user = user
     end
 
-    def register!(step)
+    def step?(name)
+      @step_registry.include?(name)
+    end
+
+    def enqueue_step!(name, *args)
+      @step_registry[name].new(*args).enqueue!(self)
+    end
+
+    def enqueue!(step)
       @steps << step
     end
 
     def run!
       @steps.inject(run: [], skipped: []) do |acc, step|
-        Logging.info "Running step #{step}"
+        logger.info "Running step #{step}"
+
         begin
           acc[:run] << [step, step.run!]
         rescue StepSkipped => e
           acc[:skipped] << [step, e.reason]
         rescue StepFailed => e
-          Logging.error "Step #{step} failed with #{e.type}"
+          logger.error "Step #{step} failed with #{e.type}"
           raise
         rescue StandardError
-          Logging.error "An exception occurred running #{step}"
+          logger.error "An exception occurred running #{step}"
           raise
         end
 

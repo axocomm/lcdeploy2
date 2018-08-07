@@ -1,9 +1,12 @@
 require 'lcdeploy/internal_dsl/errors'
 require 'lcdeploy/internal_dsl/field_spec'
+require 'lcdeploy/logging'
 
 module LCD
   module InternalDSL
     class ParamSpec
+      include ModuleLogger
+
       def initialize(&block)
         @fields = {}
         instance_eval(&block)
@@ -34,7 +37,7 @@ module LCD
       end
 
       def add_field!(field, type, options = {})
-        puts "Register #{field}:#{type} with #{options}"
+        logger.silly "Registering #{field}:#{type} with #{options}"
         @fields[field] = FieldSpec.new(field, type, options)
       rescue FieldSpecError => e
         $stderr.puts(e)

@@ -6,6 +6,8 @@ require 'lcdeploy/internal_dsl/param_spec'
 module LCD
   module InternalDSL
     class StepDef
+      include ModuleLogger
+
       def initialize(name, &block)
         @name = name
         @class_name = name.to_s.split(/_/).collect(&:capitalize).join
@@ -23,7 +25,6 @@ module LCD
 
       def parameters(&block)
         @param_spec = ParamSpec.new(&block)
-        puts "Spec is #{@param_spec}"
       end
 
       def label_param(name)
@@ -50,6 +51,8 @@ module LCD
 
       def classify!
         step_type = @name
+        step_logger = LCD::Logging[step_type]
+
         klass = LCD::Steps.const_set(@class_name, Class.new(superclass))
         label_param = @label_param
         attrs = [label_param, :params]
@@ -57,13 +60,13 @@ module LCD
         param_spec = @param_spec
         run_block = @run_block
 
-        Logging.debug "Registering #{@class_name} expecting #{attrs}"
+        logger.debug "Registering #{@class_name} expecting #{attrs}"
 
         klass.class_eval do
           attr_reader *attrs
 
           define_method(:initialize) do |label, params = {}|
-            Logging.info "Creates a new #{klass}"
+            log_debug "Creating a new #{klass}"
             super(params.merge(label_param => label))
 
             @params.each do |p, v|
@@ -74,9 +77,19 @@ module LCD
           define_method(:param_spec) { param_spec }
           define_method(:run!, run_block)
           define_method(:step_type) { step_type }
+
+          %i[silly debug info warning error].each do |level|
+            define_method("log_#{level}".to_sym) do |msg|
+              step_logger.log(msg, level)
+            end
+          end
+
+          define_method(:to_s) do
+            "#{self.class.name}[#{@params[label_param]}]"
+          end
         end
 
-        klass
+        [@name, klass]
       end
 
       def to_h
