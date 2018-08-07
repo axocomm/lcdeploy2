@@ -6,8 +6,10 @@ require 'lcdeploy/logging'
 module LCD
   class CLI < Thor
     include LCD
+    include ModuleLogger
 
-    class_option :verbose, type: :boolean, aliases: :v
+    class_option :silly, type: :boolean, aliases: :s
+    class_option :debug, type: :boolean, aliases: :d
     class_option :quiet, type: :boolean, aliases: :q
 
     def initialize(*args)
@@ -23,7 +25,7 @@ module LCD
 
     desc 'deploy LCDFILE', 'Deploy from an lcdfile'
     def deploy(filename = 'Lcdfile')
-      Logging.info "Deploying from #{filename}"
+      logger.info "Deploying from #{filename}"
       result = Lcdfile.new(filename).run!
       puts result.to_h
     end
@@ -31,11 +33,16 @@ module LCD
     private
 
     def configure_logging!
-      if options[:verbose]
-        Logging.configure! verbose: true
-      elsif options[:quiet]
-        Logging.configure! quiet: true
-      end
+      level = if options[:silly]
+                :silly
+              elsif options[:debug]
+                :debug
+              elsif options[:quiet]
+                :warning
+              else
+                :info
+              end
+      Logging.configure! level: level
     end
   end
 end

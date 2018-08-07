@@ -1,5 +1,3 @@
-require 'lcdeploy/internal_dsl'
-
 defstep :print_date do
   parameters do
     date_format :string, required: true

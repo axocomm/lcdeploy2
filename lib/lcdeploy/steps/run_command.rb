@@ -1,6 +1,3 @@
-require 'lcdeploy/internal_dsl'
-require 'lcdeploy/logging'
-
 defstep :run_command do
   remote_step!
 

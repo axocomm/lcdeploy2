@@ -13,9 +13,9 @@ module LCD
 
       attr_reader :level
 
-      def initialize(name)
+      def initialize(name, level = :debug)
         @name = name
-        @level = :debug
+        @level = level
       end
 
       def configure!(params = {})
@@ -66,7 +66,7 @@ module LCD
       end
 
       def self.logger(name)
-        @@loggers[name] || (@@loggers[name] = Logger.new(name))
+        @@loggers[name] || (@@loggers[name] = Logger.new(name, level))
       end
 
       def self.root_logger
@@ -92,18 +92,7 @@ module LCD
       end
 
       def configure!(params)
-        logger_params = case params[:mode]
-                        when :silly
-                          { level: :silly }
-                        when :verbose
-                          { level: :debug }
-                        when :quiet
-                          { level: :warning }
-                        else
-                          {}
-                        end
-
-        LoggerManager.configure!(logger_params)
+        LoggerManager.configure!(params.merge(all: true))
       end
 
       def logger(name)
