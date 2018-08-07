@@ -22,10 +22,10 @@ class Net::SSH::Connection::Session
 
     loop
 
-    LCD::SSH::SSHCommandResult.new cmd: cmd,
-                                   stdout: stdout.chomp,
-                                   stderr: stderr.chomp,
-                                   exit_code: rv
+    LCD::StepResults::SSHCommandResult.new cmd: cmd,
+                                           stdout: stdout.chomp,
+                                           stderr: stderr.chomp,
+                                           exit_code: rv
   end
 end
 
@@ -46,32 +46,6 @@ module LCD
 
     def self.ssh_check(cmd, ssh_config = {})
       ssh_exec(cmd, ssh_config).success?
-    end
-
-    # TODO: CommandResult superclass?
-    class SSHCommandResult
-      attr_reader :cmd, :stdout, :stderr, :exit_code
-
-      def initialize(result = {})
-        @cmd = result[:cmd]
-        @stdout = result[:stdout]
-        @stderr = result[:stderr]
-        @exit_code = result[:exit_code]
-      end
-
-      def success?
-        @exit_code.zero?
-      end
-
-      def to_h
-        {
-          cmd: @cmd,
-          stdout: @stdout,
-          stderr: @stderr,
-          exit_code: @exit_code,
-          success: success?
-        }
-      end
     end
   end
 end

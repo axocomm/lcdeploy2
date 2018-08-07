@@ -70,11 +70,43 @@ module LCD
         logger.error "SSH command #{cmd} failed with #{result.exit_code}"
         raise StepFailed.new(self, ssh_result: result)
       end
+
+      result
     end
 
     # TODO: Should probably not need to have this
     def to_h
       super.merge(remote: true)
+    end
+  end
+
+  module StepResults
+    class CommandResult
+    end
+
+    class SSHCommandResult < CommandResult
+      attr_reader :cmd, :stdout, :stderr, :exit_code
+
+      def initialize(result = {})
+        @cmd = result[:cmd]
+        @stdout = result[:stdout]
+        @stderr = result[:stderr]
+        @exit_code = result[:exit_code]
+      end
+
+      def success?
+        @exit_code.zero?
+      end
+
+      def to_h
+        {
+          cmd: @cmd,
+          stdout: @stdout,
+          stderr: @stderr,
+          exit_code: @exit_code,
+          success: success?
+        }
+      end
     end
   end
 
