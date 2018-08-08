@@ -103,6 +103,10 @@ module LCD
         logger(name)
       end
     end
+
+    def self.levels
+      Logger::LEVELS.keys
+    end
   end
 
   module ModuleLogger

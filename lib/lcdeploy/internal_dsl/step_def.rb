@@ -90,7 +90,7 @@ module LCD
           define_method(:run!, run_block)
           define_method(:step_type) { step_type }
 
-          %i[silly debug info warning error].each do |level|
+          LCD::Logging.levels.each do |level|
             define_method("log_#{level}".to_sym) do |msg|
               step_logger.log(msg, level)
             end
