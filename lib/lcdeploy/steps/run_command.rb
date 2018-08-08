@@ -10,6 +10,6 @@ defstep :run_command do
 
   run do
     log_debug "Running command #{@command} as #{@user}"
-    ssh_exec @command
+    @command
   end
 end

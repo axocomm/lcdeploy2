@@ -7,5 +7,5 @@ defstep :print_date do
 
   label_param :date_format
 
-  run_ssh { "date +'#{@date_format}'" }
+  run { "date +'#{@date_format}'" }
 end
