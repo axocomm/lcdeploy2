@@ -29,8 +29,15 @@ module LCD
       @step_registry.include?(name)
     end
 
+    # Initialize a new step by name with provided arguments.
+    def new_step(name, *args)
+      @step_registry[name].new(*args)
+    end
+
+    # Initialize a step and enqueue it, passing self to ensure access
+    # to this context.
     def enqueue_step!(name, *args)
-      @step_registry[name].new(*args).enqueue!(self)
+      new_step(name, *args).enqueue!(self)
     end
 
     def enqueue!(step)
@@ -40,25 +47,25 @@ module LCD
     def run!
       @steps.inject(run: [], skipped: []) do |acc, step|
         logger.info "Running step #{step}"
-
-        begin
-          result = step.run!
-          logger.info "Run result was #{result}"
-          acc[:run] << [step, result]
-        rescue StepSkipped => e
-          reason = e.reason
-          logger.info "Step skipped: #{reason}"
-          acc[:skipped] << [step, reason]
-        rescue StepFailed => e
-          logger.error "Step #{step} failed with #{e.type}"
-          raise
-        rescue StandardError
-          logger.error "An exception occurred running #{step}"
-          raise
-        end
-
-        acc
+        k, result = run_step!(step)
+        acc[k] << result
       end
+    end
+
+    def run_step!(step)
+      result = step.run!
+      logger.info "Run result was #{result}"
+      [:run, [step, result]]
+    rescue StepSkipped => e
+      reason = e.reason
+      logger.info "Step skipped: #{reason}"
+      [:skipped, [step, reason]]
+    rescue StepFailed => e
+      logger.error "Step #{step} failed with #{e.type}"
+      raise
+    rescue StandardError
+      logger.error "An exception occurred running #{step}"
+      raise
     end
 
     def configure!(params)
