@@ -29,13 +29,17 @@ module LCD
       nil
     end
 
-    def enqueue!(ctx)
-      ctx.enqueue!(as_user(ctx.current_user))
+    def enqueue!
+      if @ctx.nil?
+        logger.error 'Cannot enqueue! without a Context'
+      else
+        @ctx.enqueue!(self)
+      end
     end
 
-    # TODO: Better way to do this?
-    def as_user(user)
-      param_spec && param_spec.maybe_set_default!(:user, user)
+    def with_context(ctx)
+      @ctx = ctx
+      param_spec && param_spec.maybe_set_default!(:user, ctx.current_user)
       self
     end
 
@@ -59,9 +63,10 @@ module LCD
       port: 22
     }
 
-    def enqueue!(ctx)
+    def with_context(ctx)
       super
       @ssh_config = SSH_DEFAULTS.merge(ctx.ssh_config)
+      self
     end
 
     def ssh_exec(cmd)

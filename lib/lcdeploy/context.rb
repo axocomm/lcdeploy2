@@ -31,13 +31,13 @@ module LCD
 
     # Initialize a new step by name with provided arguments.
     def new_step(name, *args)
-      @step_registry[name].new(*args)
+      @step_registry[name].new(*args).with_context(self)
     end
 
     # Initialize a step and enqueue it, passing self to ensure access
     # to this context.
     def enqueue_step!(name, *args)
-      new_step(name, *args).enqueue!(self)
+      new_step(name, *args).enqueue!
     end
 
     def enqueue!(step)
@@ -49,6 +49,7 @@ module LCD
         logger.info "Running step #{step}"
         k, result = run_step!(step)
         acc[k] << result
+        acc
       end
     end
 
