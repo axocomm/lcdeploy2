@@ -1,0 +1,95 @@
+#!/usr/bin/env ruby
+
+require 'tty-prompt'
+
+require 'lcdeploy/context'
+require 'lcdeploy/dsl'
+require 'lcdeploy/logging'
+
+module LCD
+  module Shell
+    class InteractiveDSL < LCD::DSL
+      def eval_line!(line)
+        logger.info "Evaluating '#{line}'"
+        instance_eval(line)
+      end
+
+      def method_missing(mtd, *args)
+        if @ctx.step?(mtd)
+          res = @ctx.run_step!(@ctx.new_step(mtd, *args))
+          InteractiveResult.from_array(res)
+        else
+          super
+        end
+      end
+    end
+
+    class InteractiveResult
+      attr_reader :status, :step, :result
+
+      def initialize(status, step, result)
+        @status = status
+        @step = step
+        @result = result
+      end
+
+      def to_h
+        {
+          status: @status,
+          step: @step.to_h,
+          result: @result.to_h
+        }
+      end
+
+      def self.from_array(arr)
+        new(*arr.flatten)
+      rescue StandardError => e
+        logger.error "Could not extract result: #{e}"
+        [:failed, [nil, { reason: 'Could not extract result', val: arr }]]
+      end
+    end
+
+    class REPL
+      PROMPT = '[lcd] %'
+
+      def initialize
+        @ctx = Context.new
+        @dsl = InteractiveDSL.new(@ctx)
+      end
+
+      def start!
+        prompt = TTY::Prompt.new(interrupt: :exit)
+
+        loop do
+          result = handle!(prompt.ask(PROMPT))
+          puts result
+        end
+      end
+
+      def handle!(line)
+        case line
+        when /^q(u(i(t)?)?)?$/i
+          puts 'Bye'
+          exit
+        when /get-ctx/
+          @ctx.to_h
+        else
+          dsl_eval!(line)
+        end
+      end
+
+      def dsl_eval!(line)
+        @dsl.eval_line!(line)
+      rescue StandardError => e
+        puts "Got an exception: #{e}"
+        nil
+      end
+    end
+  end
+end
+
+if $PROGRAM_NAME == __FILE__
+  puts 'Starting REPL...'
+  LCD::Logging.configure! level: :warning
+  LCD::Shell::REPL.new.start!
+end

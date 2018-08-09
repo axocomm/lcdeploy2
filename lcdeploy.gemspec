@@ -2,6 +2,7 @@ Gem::Specification.new do |s|
   s.name        = 'lcdeploy'
   s.version     = '0.1'
   s.executables << 'lcd'
+  s.executables << 'lcdsh'
   s.date        = '2018-08-02'
   s.summary     = 'Deploys things'
   s.description = 'Ruby is great'
@@ -15,4 +16,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'net-scp', '~> 1.2'
   s.add_dependency 'net-ssh', '~> 4.2'
   s.add_dependency 'thor', '~> 0.20'
+  s.add_dependency 'tty-prompt', '~> 0.17'
 end
